@@ -90,13 +90,31 @@ export const VideoSection: React.FC = () => {
     setIsMuted(nextMuted);
   };
 
-  const enableSound = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const enableSound = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     if (!videoRef.current) return;
     videoRef.current.muted = false;
     setIsMuted(false);
     if (videoRef.current.paused) {
-      videoRef.current.play().catch(() => {});
+      userPausedRef.current = false;
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+    }
+  };
+
+  // Unmute and start audio automatically when mouse cursor enters/hovers over the video
+  const handleMouseEnter = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
+    setIsMuted(false);
+    if (video.paused) {
+      userPausedRef.current = false;
+      video
+        .play()
+        .then(() => setIsPlaying(true))
+        .catch((err) => {
+          console.log("Unmute on hover attempt:", err);
+        });
     }
   };
 
@@ -225,6 +243,7 @@ export const VideoSection: React.FC = () => {
 
               <div
                 id="video-player-card"
+                onMouseEnter={handleMouseEnter}
                 className="relative bg-black rounded-[32px] overflow-hidden border border-[#E8D8CC] shadow-2xl group select-none aspect-[9/16]"
               >
                 {/* HTML5 Native Video with Autoplay when in view */}
@@ -242,6 +261,7 @@ export const VideoSection: React.FC = () => {
                   onPause={() => setIsPlaying(false)}
                   onEnded={() => setIsPlaying(false)}
                   onClick={togglePlay}
+                  onMouseEnter={handleMouseEnter}
                   className="w-full h-full object-cover cursor-pointer"
                 />
 
@@ -301,7 +321,7 @@ export const VideoSection: React.FC = () => {
                       className="pointer-events-auto inline-flex items-center gap-2 bg-[#5B4942]/90 hover:bg-[#5B4942] text-white text-xs font-semibold px-4 py-2 rounded-full shadow-lg backdrop-blur-md border border-white/25 active:scale-95 transition-all cursor-pointer"
                     >
                       <Volume2 className="w-3.5 h-3.5 text-[#F3C5B5] animate-bounce" />
-                      <span>Toque para ativar o áudio</span>
+                      <span>Passe o mouse para ativar o áudio</span>
                     </button>
                   </div>
                 )}
@@ -346,7 +366,7 @@ export const VideoSection: React.FC = () => {
                       className="inline-flex items-center gap-1.5 text-[#5B4942] font-semibold hover:underline cursor-pointer"
                     >
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span>Vídeo em reprodução automática • Clique para ativar áudio</span>
+                      <span>Vídeo em reprodução • Passe o mouse ou clique para ouvir o áudio</span>
                     </button>
                   ) : (
                     <span className="inline-flex items-center gap-1.5 text-emerald-700 font-medium">

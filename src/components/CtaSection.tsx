@@ -1,38 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle, MapPin, Sparkles, Heart } from 'lucide-react';
 import { getWhatsAppUrl } from '../data/content';
+import sectionBgImage from '../assets/images/section_bg.png';
 
 export const CtaSection: React.FC = () => {
-  return (
-    <section id="contato" className="py-20 lg:py-28 relative overflow-hidden bg-gradient-to-b from-white via-[#F7F2EC] to-[#FAF8F5]">
-      {/* Decorative subtle background aura */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-gradient-to-r from-[#E8D8CC]/50 via-[#CFAFA4]/30 to-transparent rounded-full blur-3xl pointer-events-none -z-10" />
+  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgSrc, setImgSrc] = useState(sectionBgImage);
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+  return (
+    <section id="contato" className="relative py-24 sm:py-32 lg:py-36 overflow-hidden">
+      {/* Background Image Container with Multi-layer Warm Contrast Overlays */}
+      <div className="absolute inset-0 z-0 select-none pointer-events-none">
+        <img
+          src={imgSrc}
+          onError={() => setImgSrc("https://i.ibb.co/KcnKdvwW/Chat-GPT-Image-22-de-set-de-2026-21-29-58.png")}
+          onLoad={() => setImgLoaded(true)}
+          alt="Ambiente acolhedor e seguro de pós-operatório - Vanessa Chaves"
+          className={`w-full h-full object-cover object-center transition-all duration-1000 ${
+            imgLoaded ? 'scale-100 blur-none' : 'scale-105 blur-xs'
+          }`}
+        />
+        {/* Elegant warm overlay that keeps the image vividly visible while ensuring high contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#251C17]/75 via-[#251C17]/45 to-[#251C17]/80" />
+        <div className="absolute inset-0 bg-black/20" />
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           id="final-cta-card"
           initial={{ opacity: 0, y: 36, scale: 0.98 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          className="relative rounded-3xl p-8 sm:p-12 lg:p-16 bg-[#5B4942] text-white text-center shadow-xl border border-[#7E6961]/40 overflow-hidden"
+          className="relative rounded-3xl p-8 sm:p-12 lg:p-16 bg-[#2B211C]/75 backdrop-blur-md text-white text-center shadow-2xl border border-white/20 overflow-hidden"
         >
-          {/* Subtle floral/organic corner accent */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 bg-[#CFAFA4]/20 rounded-full blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-[#9BA89B]/20 rounded-full blur-2xl pointer-events-none" />
+          {/* Subtle glowing ambient accents */}
+          <div className="absolute -top-16 -right-16 w-56 h-56 bg-[#CFAFA4]/25 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-16 -left-16 w-56 h-56 bg-[#9BA89B]/20 rounded-full blur-3xl pointer-events-none" />
 
           {/* Badge */}
           <div className="mb-6">
-            <span className="inline-block px-3 py-1 bg-white/10 text-[#E8D8CC] text-[10px] font-bold tracking-[0.1em] rounded-sm uppercase">
-              RECUPERAÇÃO COM SEGURANÇA E ACOLHIMENTO
+            <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/15 text-[#E8D8CC] text-[11px] font-bold tracking-[0.15em] rounded-full uppercase border border-white/20 shadow-xs">
+              <Sparkles className="w-3 h-3 text-[#CFAFA4]" />
+              <span>RECUPERAÇÃO COM SEGURANÇA E ACOLHIMENTO</span>
             </span>
           </div>
 
           {/* Heading */}
           <h2
             id="cta-final-heading"
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-white mb-6 leading-tight max-w-2xl mx-auto"
+            className="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-white mb-6 leading-tight max-w-2xl mx-auto drop-shadow-sm"
           >
             Seu pós-operatório merece cuidado e atenção.
           </h2>
@@ -40,13 +58,13 @@ export const CtaSection: React.FC = () => {
           {/* Subtext */}
           <p
             id="cta-final-text"
-            className="text-base sm:text-xl text-[#E8D8CC] leading-relaxed max-w-2xl mx-auto mb-8 font-light"
+            className="text-base sm:text-xl text-[#F2E8E1] leading-relaxed max-w-2xl mx-auto mb-8 font-light drop-shadow-2xs"
           >
-            Conte com um atendimento humanizado e personalizado durante essa etapa.
+            Conte com um atendimento humanizado, científico e personalizado durante essa etapa crucial para os seus resultados.
           </p>
 
           {/* Location highlight */}
-          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#FAF8F5] bg-white/10 px-4 py-2 rounded-full border border-white/20 mb-8 font-medium">
+          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-white bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 mb-9 font-medium shadow-xs">
             <MapPin className="w-3.5 h-3.5 text-[#CFAFA4]" />
             <span>Atendimento presencial em Imperatriz – MA</span>
           </div>
@@ -58,7 +76,7 @@ export const CtaSection: React.FC = () => {
               href={getWhatsAppUrl("Olá, Vanessa! Gostaria de agendar meu atendimento pelo WhatsApp.")}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white px-8 sm:px-10 py-4 sm:py-5 rounded-full font-bold text-xs sm:text-sm uppercase tracking-widest shadow-[0_6px_25px_rgba(37,211,102,0.4)] hover:shadow-[0_8px_30px_rgba(37,211,102,0.6)] transition-all active:scale-[0.98] group"
+              className="inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white px-8 sm:px-10 py-4 sm:py-5 rounded-full font-bold text-xs sm:text-sm uppercase tracking-widest shadow-[0_6px_25px_rgba(37,211,102,0.45)] hover:shadow-[0_8px_30px_rgba(37,211,102,0.6)] transition-all active:scale-[0.98] group cursor-pointer"
             >
               <svg
                 width="20"
@@ -79,7 +97,7 @@ export const CtaSection: React.FC = () => {
                 e.preventDefault();
                 document.querySelector('#agendamento')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="inline-flex items-center justify-center gap-2 bg-white/15 hover:bg-white/25 text-white border border-white/30 px-8 py-4 sm:py-5 rounded-full font-bold text-xs sm:text-sm uppercase tracking-widest transition-all"
+              className="inline-flex items-center justify-center gap-2 bg-white/20 hover:bg-white/30 text-white border border-white/40 px-8 py-4 sm:py-5 rounded-full font-bold text-xs sm:text-sm uppercase tracking-widest transition-all cursor-pointer backdrop-blur-xs"
             >
               <span>Preencher Formulário</span>
             </a>

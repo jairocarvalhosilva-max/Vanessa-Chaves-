@@ -12,7 +12,6 @@ import { FaqSection } from './components/FaqSection';
 import { AppointmentSection } from './components/AppointmentSection';
 import { CtaSection } from './components/CtaSection';
 import { Footer } from './components/Footer';
-import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { BackToTopButton } from './components/BackToTopButton';
 
 export default function App() {
@@ -76,10 +75,7 @@ export default function App() {
       {/* 11. Footer with Legal Disclaimer and Local Info */}
       <Footer />
 
-      {/* 12. Persistent Floating WhatsApp Button */}
-      <WhatsAppFloatingButton />
-
-      {/* 13. Smooth Back to Top Button (appears after Hero) */}
+      {/* 12. Smooth Back to Top Button (appears after Hero) */}
       <BackToTopButton />
     </div>
   );

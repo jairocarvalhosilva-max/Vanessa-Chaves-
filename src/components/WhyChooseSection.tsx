@@ -1,7 +1,31 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Check, Sparkles, Heart, Shield, Clock, Compass, Eye, UserCheck } from 'lucide-react';
 import { WHY_CHOOSE_ITEMS, getWhatsAppUrl } from '../data/content';
+
+const benefitsContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const benefitItemVariants: Variants = {
+  hidden: { opacity: 0, y: 24, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 export const WhyChooseSection: React.FC = () => {
   const getItemIcon = (index: number) => {
@@ -79,24 +103,28 @@ export const WhyChooseSection: React.FC = () => {
 
           {/* Right Column: 7 Specific Benefits List */}
           <div className="lg:col-span-7">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <motion.div
+              variants={benefitsContainerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+            >
               {WHY_CHOOSE_ITEMS.map((item, index) => (
                 <motion.div
                   key={index}
                   id={`benefit-item-${index + 1}`}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{
-                    duration: 0.55,
-                    delay: index * 0.08,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className="p-5 rounded-2xl bg-white border border-[#E8D8CC] hover:border-[#CFAFA4] hover:shadow-sm transition-all flex items-start gap-4"
+                  variants={benefitItemVariants}
+                  whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                  className="p-5 rounded-2xl bg-white border border-[#E8D8CC] hover:border-[#CFAFA4] hover:shadow-sm transition-all flex items-start gap-4 group"
                 >
-                  <div className="w-10 h-10 rounded-full bg-[#FAF8F5] border border-[#CFAFA4] flex items-center justify-center shrink-0">
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 6 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                    className="w-10 h-10 rounded-full bg-[#FAF8F5] border border-[#CFAFA4] group-hover:bg-[#CFAFA4] flex items-center justify-center shrink-0 transition-colors"
+                  >
                     {getItemIcon(index)}
-                  </div>
+                  </motion.div>
                   <div>
                     <h3 className="font-serif text-base font-bold text-[#5B4942] mb-1 flex items-center gap-1.5">
                       <span className="text-[#9BA89B] text-sm">✓</span>
@@ -112,19 +140,17 @@ export const WhyChooseSection: React.FC = () => {
               {/* Special 8th card to complete the visual balance */}
               <motion.div
                 id="benefit-item-extra-care"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{
-                  duration: 0.55,
-                  delay: 0.5,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-                className="p-5 rounded-2xl bg-white border border-[#E8D8CC] flex items-center gap-4 sm:col-span-2 shadow-xs"
+                variants={benefitItemVariants}
+                whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                className="p-5 rounded-2xl bg-white border border-[#E8D8CC] hover:border-[#CFAFA4] hover:shadow-sm transition-all flex items-center gap-4 sm:col-span-2 shadow-xs group"
               >
-                <div className="w-10 h-10 rounded-full bg-[#FAF8F5] border border-[#CFAFA4] flex items-center justify-center text-[#5B4942] shrink-0">
-                  <Sparkles className="w-4 h-4 text-[#5B4942]" />
-                </div>
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 6 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 17 }}
+                  className="w-10 h-10 rounded-full bg-[#FAF8F5] border border-[#CFAFA4] group-hover:bg-[#CFAFA4] flex items-center justify-center text-[#5B4942] group-hover:text-white shrink-0 transition-colors"
+                >
+                  <Sparkles className="w-4 h-4 text-[#5B4942] group-hover:text-white transition-colors" />
+                </motion.div>
                 <div>
                   <h4 className="font-serif text-sm sm:text-base font-bold text-[#5B4942]">
                     Suporte contínuo para sua tranquilidade
@@ -134,7 +160,7 @@ export const WhyChooseSection: React.FC = () => {
                   </p>
                 </div>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

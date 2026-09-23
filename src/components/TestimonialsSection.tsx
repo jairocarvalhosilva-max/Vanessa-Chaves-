@@ -1,7 +1,31 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { Star, MessageCircle, Heart, Sparkles } from 'lucide-react';
 import { TESTIMONIALS, getWhatsAppUrl } from '../data/content';
+
+const testimonialsContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const testimonialCardVariants: Variants = {
+  hidden: { opacity: 0, y: 32, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
 
 export const TestimonialsSection: React.FC = () => {
   return (
@@ -37,20 +61,25 @@ export const TestimonialsSection: React.FC = () => {
         </motion.div>
 
         {/* Testimonials Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+        <motion.div
+          variants={testimonialsContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8"
+        >
           {TESTIMONIALS.map((t, index) => (
             <motion.div
               key={t.id}
               id={`testimonial-card-${index + 1}`}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{
-                duration: 0.55,
-                delay: index * 0.1,
-                ease: [0.22, 1, 0.36, 1],
+              variants={testimonialCardVariants}
+              whileHover={{
+                y: -6,
+                scale: 1.02,
+                boxShadow: '0 16px 28px -8px rgba(91, 73, 66, 0.08)',
+                transition: { duration: 0.25, ease: 'easeOut' },
               }}
-              className="p-7 sm:p-8 rounded-2xl bg-white border border-[#E8D8CC] hover:border-[#CFAFA4] shadow-xs hover:shadow-sm transition-all flex flex-col justify-between"
+              className="p-7 sm:p-8 rounded-2xl bg-white border border-[#E8D8CC] hover:border-[#CFAFA4] shadow-xs transition-all flex flex-col justify-between group"
             >
               <div>
                 {/* 5 Stars Rating */}
@@ -58,7 +87,7 @@ export const TestimonialsSection: React.FC = () => {
                   {[...Array(t.rating)].map((_, i) => (
                     <Star
                       key={i}
-                      className="w-4 h-4 fill-[#CFAFA4] text-[#CFAFA4]"
+                      className="w-4 h-4 fill-[#CFAFA4] text-[#CFAFA4] group-hover:scale-110 transition-transform"
                     />
                   ))}
                 </div>
@@ -84,7 +113,7 @@ export const TestimonialsSection: React.FC = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Testimonial Invitation Box */}
         <motion.div

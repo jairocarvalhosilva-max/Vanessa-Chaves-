@@ -71,8 +71,8 @@ export const Header: React.FC = () => {
             ))}
           </nav>
 
-          {/* Right CTA Button */}
-          <div className="hidden sm:flex items-center gap-3">
+          {/* Right CTA Buttons */}
+          <div className="hidden sm:flex items-center gap-2.5">
             <span className="hidden xl:inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-semibold text-[#7A6A63] bg-[#E8D8CC]/40 px-3 py-1.5 rounded-full border border-[#E8D8CC]">
               <MapPin className="w-3.5 h-3.5 text-[#5B4942]" />
               Imperatriz – MA
@@ -81,10 +81,26 @@ export const Header: React.FC = () => {
               id="header-cta-button"
               href="#agendamento"
               onClick={(e) => handleNavClick(e, '#agendamento')}
-              className="inline-flex items-center gap-2 bg-[#5B4942] hover:bg-[#CFAFA4] text-white px-5 py-2.5 text-xs uppercase tracking-widest font-bold rounded-full transition-colors shadow-xs active:scale-[0.98]"
+              className="inline-flex items-center gap-2 bg-[#5B4942] hover:bg-[#43332D] text-white px-4 py-2 text-xs uppercase tracking-widest font-bold rounded-full transition-colors shadow-xs active:scale-[0.98]"
             >
-              <Calendar className="w-4 h-4 text-[#CFAFA4]" />
+              <Calendar className="w-3.5 h-3.5 text-[#CFAFA4]" />
               <span>Agendar Horário</span>
+            </a>
+            <a
+              id="header-whatsapp-cta"
+              href={getWhatsAppUrl("Olá, Vanessa! Gostaria de agendar meu atendimento pelo WhatsApp.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20BD5A] text-white px-4 py-2 text-xs uppercase tracking-widest font-bold rounded-full transition-all shadow-xs hover:shadow-md active:scale-95 animate-whatsapp-pulse cursor-pointer"
+              aria-label="Falar no WhatsApp"
+              title="Falar com Vanessa no WhatsApp"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-badge-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
+              <MessageCircle className="w-4 h-4 text-white" />
+              <span>WhatsApp</span>
             </a>
           </div>
 
@@ -92,28 +108,34 @@ export const Header: React.FC = () => {
           <div className="flex items-center gap-2 sm:hidden">
             <a
               id="header-mobile-quick-cta"
-              href={getWhatsAppUrl()}
+              href="#agendamento"
+              onClick={(e) => handleNavClick(e, '#agendamento')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#5B4942] hover:bg-[#43332D] text-white text-xs font-semibold shadow-xs transition-all active:scale-95"
+              aria-label="Agendar Horário"
+            >
+              <Calendar className="w-3.5 h-3.5 text-[#CFAFA4]" />
+              <span>Agendar</span>
+            </a>
+            <a
+              id="header-mobile-whatsapp-cta"
+              href={getWhatsAppUrl("Olá, Vanessa! Gostaria de agendar meu atendimento pelo WhatsApp.")}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold shadow-sm transition-all active:scale-95"
-              aria-label="WhatsApp"
+              className="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#25D366] hover:bg-[#20BD5A] text-white shadow-xs transition-all active:scale-95 animate-whatsapp-pulse"
+              aria-label="Falar no WhatsApp"
+              title="Falar com Vanessa no WhatsApp"
             >
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="shrink-0"
-              >
-                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884 0 2.225.569 3.807 1.594 5.397l-.997 3.646 3.892-.942zm11.366-7.327c-.314-.157-1.858-.917-2.148-1.022-.289-.104-.5-.157-.71.157-.21.314-.813 1.022-.996 1.231-.183.209-.367.235-.68.079-.314-.157-1.328-.489-2.53-1.562-.936-.836-1.566-1.868-1.749-2.182-.183-.314-.02-.485.137-.641.141-.14.314-.367.471-.55.157-.183.209-.314.314-.524.105-.21.052-.393-.026-.55-.079-.157-.71-1.711-.973-2.34-.256-.611-.516-.529-.71-.539-.183-.01-.393-.012-.603-.012s-.55.079-.838.393c-.289.314-1.101 1.074-1.101 2.62s1.127 3.038 1.284 3.248c.157.209 2.218 3.388 5.373 4.75.751.324 1.336.518 1.792.663.753.239 1.439.206 1.982.125.604-.09 1.858-.759 2.121-1.492.262-.733.262-1.362.183-1.492-.08-.131-.289-.209-.603-.366z"/>
-              </svg>
-              <span>WhatsApp</span>
+              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                <span className="animate-badge-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
+              <MessageCircle className="w-4 h-4 text-white" />
             </a>
             <button
               id="mobile-menu-toggle-btn"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl text-[#5B4942] bg-[#E8D8CC]/30 hover:bg-[#E8D8CC]/60 focus:outline-none transition-colors"
+              className="p-2 rounded-xl text-[#5B4942] bg-[#E8D8CC]/30 hover:bg-[#E8D8CC]/60 focus:outline-none transition-colors"
               aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -168,7 +190,7 @@ export const Header: React.FC = () => {
                 href={getWhatsAppUrl("Olá, Vanessa! Gostaria de agendar meu atendimento.")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2.5 bg-[#25D366] text-white py-3 px-4 rounded-xl text-xs uppercase tracking-widest font-bold text-center shadow-xs active:scale-[0.99]"
+                className="w-full flex items-center justify-center gap-2.5 bg-[#25D366] hover:bg-[#20BD5A] text-white py-3.5 px-4 rounded-xl text-xs uppercase tracking-widest font-bold text-center shadow-xs active:scale-[0.99] animate-whatsapp-pulse"
               >
                 <MessageCircle className="w-4 h-4 text-white" />
                 <span>Falar Direto no WhatsApp</span>

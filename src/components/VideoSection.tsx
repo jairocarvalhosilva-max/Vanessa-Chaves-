@@ -8,96 +8,145 @@ export const VideoSection: React.FC = () => {
   const [isMuted, setIsMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMutedRef = useRef(true);
   const userPausedRef = useRef(false);
+
+  // Sync ref with state
+  useEffect(() => {
+    isMutedRef.current = isMuted;
+    if (videoRef.current) {
+      videoRef.current.muted = isMuted;
+    }
+  }, [isMuted]);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Autoplay in modern browsers requires muted audio
-    video.muted = isMuted;
+    // Ensure audio starts muted for browser autoplay policy compliance
+    video.muted = true;
+    video.defaultMuted = true;
+
+    const playVideo = async () => {
+      if (!video) return;
+      try {
+        await video.play();
+        setIsPlaying(true);
+      } catch (err) {
+        // If unmuted playback is blocked by browser policy, force mute and retry immediately
+        video.muted = true;
+        setIsMuted(true);
+        isMutedRef.current = true;
+        try {
+          await video.play();
+          setIsPlaying(true);
+        } catch (fallbackErr) {
+          console.log("Autoplay fallback prevented by browser:", fallbackErr);
+        }
+      }
+    };
+
+    const pauseVideo = () => {
+      if (!video) return;
+      if (!video.paused) {
+        video.pause();
+        setIsPlaying(false);
+      }
+      // Reset pause intent so it plays automatically when re-entering viewport
+      userPausedRef.current = false;
+    };
+
+    const targetElement = containerRef.current || video;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
-            // Autoplay automatically when entering screen unless user explicitly paused
+          // When video appears on screen (at least 15% visible)
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.15) {
             if (!userPausedRef.current) {
-              const playPromise = video.play();
-              if (playPromise !== undefined) {
-                playPromise
-                  .then(() => {
-                    setIsPlaying(true);
-                  })
-                  .catch((err) => {
-                    console.log("Autoplay attempt handled:", err);
-                    // If blocked due to audio, force mute and retry
-                    video.muted = true;
-                    setIsMuted(true);
-                    video.play().catch(() => {});
-                  });
-              }
+              playVideo();
             }
-          } else if (!entry.isIntersecting) {
-            // Pause automatically when scrolled out of view to preserve resources
-            if (!video.paused) {
-              video.pause();
-              setIsPlaying(false);
-            }
+          } else if (!entry.isIntersecting || entry.intersectionRatio < 0.1) {
+            // When video leaves the screen, stop playing immediately
+            pauseVideo();
           }
         });
       },
       {
-        threshold: [0, 0.25, 0.5, 0.75],
+        threshold: [0, 0.15, 0.5, 0.8],
+        rootMargin: '20px 0px -20px 0px',
       }
     );
 
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    } else {
-      observer.observe(video);
-    }
+    observer.observe(targetElement);
+
+    // Pause when tab is hidden, resume when tab is active if visible
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        if (!video.paused) {
+          video.pause();
+          setIsPlaying(false);
+        }
+      } else {
+        const rect = targetElement.getBoundingClientRect();
+        const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+        if (isInView && !userPausedRef.current) {
+          playVideo();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       observer.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [isMuted]);
+  }, []);
 
   const togglePlay = () => {
-    if (!videoRef.current) return;
+    const video = videoRef.current;
+    if (!video) return;
     if (isPlaying) {
-      videoRef.current.pause();
+      video.pause();
       setIsPlaying(false);
       userPausedRef.current = true;
     } else {
       userPausedRef.current = false;
-      videoRef.current
+      video
         .play()
         .then(() => {
           setIsPlaying(true);
         })
-        .catch((err) => {
-          console.error("Playback error:", err);
+        .catch(() => {
+          video.muted = true;
+          setIsMuted(true);
+          isMutedRef.current = true;
+          video.play().then(() => setIsPlaying(true)).catch(() => {});
         });
     }
   };
 
   const toggleMute = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    if (!videoRef.current) return;
-    const nextMuted = !videoRef.current.muted;
-    videoRef.current.muted = nextMuted;
+    const video = videoRef.current;
+    if (!video) return;
+    const nextMuted = !video.muted;
+    video.muted = nextMuted;
     setIsMuted(nextMuted);
+    isMutedRef.current = nextMuted;
   };
 
   const enableSound = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    if (!videoRef.current) return;
-    videoRef.current.muted = false;
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false;
     setIsMuted(false);
-    if (videoRef.current.paused) {
+    isMutedRef.current = false;
+    if (video.paused) {
       userPausedRef.current = false;
-      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+      video.play().then(() => setIsPlaying(true)).catch(() => {});
     }
   };
 
@@ -107,6 +156,7 @@ export const VideoSection: React.FC = () => {
     if (!video) return;
     video.muted = false;
     setIsMuted(false);
+    isMutedRef.current = false;
     if (video.paused) {
       userPausedRef.current = false;
       video

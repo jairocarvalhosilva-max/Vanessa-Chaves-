@@ -17,7 +17,9 @@ import {
   X,
   Loader2,
   Check,
-  PartyPopper
+  PartyPopper,
+  Award,
+  Lock
 } from 'lucide-react';
 import { CLINIC_INFO, getWhatsAppUrl } from '../data/content';
 import { AppointmentFormData } from '../types';
@@ -734,6 +736,53 @@ export const AppointmentSection: React.FC = () => {
                 </form>
               )}
             </AnimatePresence>
+
+            {/* Selo / Card de Atendimento Seguro e Certificado */}
+            <div
+              id="certified-safe-service-seal"
+              className="mt-6 pt-5 border-t border-[#DEC9BC]/60"
+            >
+              <div className="bg-[#FAF8F5] border border-[#DEC9BC] rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center sm:items-start gap-4 shadow-xs">
+                <div className="relative shrink-0 w-12 h-12 rounded-2xl bg-gradient-to-br from-[#5B4942] to-[#43332D] text-white flex items-center justify-center shadow-xs">
+                  <ShieldCheck className="w-6 h-6 text-[#CFAFA4]" />
+                  <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white flex items-center justify-center shadow-xs">
+                    <Check className="w-3 h-3 text-white stroke-[3]" />
+                  </span>
+                </div>
+
+                <div className="text-center sm:text-left flex-1">
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1.5">
+                    <h4 className="font-serif text-sm sm:text-base font-bold text-[#5B4942] flex items-center gap-1.5">
+                      <Award className="w-4 h-4 text-[#B79083]" />
+                      Atendimento Seguro e Certificado
+                    </h4>
+                    <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                      100% Confiável
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-[#7A6A63] leading-relaxed">
+                    Atendimento individualizado com rigorosas normas de biossegurança, respeito aos limites do seu corpo e total consonância com as prescrições médicas do seu cirurgião.
+                  </p>
+
+                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-[#E8D8CC]/60 text-[11px] text-[#5B4942]">
+                    <div className="flex items-center justify-center sm:justify-start gap-1.5">
+                      <Lock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>Dados e Sigilo Protegidos</span>
+                    </div>
+                    <div className="flex items-center justify-center sm:justify-start gap-1.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>Biossegurança e Higiene</span>
+                    </div>
+                    <div className="flex items-center justify-center sm:justify-start gap-1.5">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <span>Especialista Habilitada</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
             </div>
           </motion.div>
 
